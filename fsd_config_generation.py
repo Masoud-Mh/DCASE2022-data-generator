@@ -1,5 +1,6 @@
 import db_config
 import os
+import json
 
 '''
 In the First step we should read the dataset files
@@ -18,5 +19,7 @@ required_classes = ('Music', 'Musical_instrument', 'Domestic_sounds_and_home_sou
 '''(Speech_synthesizer, Whispering,Human_voice, etc) should not be included in the dataset. so we look at the audioset
 Ontology to find relative data, from parent to child search direction'''
 
-
+f = open('ontology.json')
+ontology = json.load(f)
+print('ontology printed')
 
