@@ -14,13 +14,13 @@ def copy_file(folder_name, source, destination, filename):
 
 
 def sub_id(inp_dic, onto):
-    sub_id_lists = []
+    sub_id_lists = [inp_dic['id']]
     if inp_dic['child_ids']:
         for p in onto:
             if p['id'] in inp_dic['child_ids']:
                 sub_id_lists = sub_id_lists + sub_id(p, onto)
-    else:
-        sub_id_lists.append(inp_dic['id'])
+    # else:
+    #     sub_id_lists.append(inp_dic['id'])
     return sub_id_lists
 
 
@@ -223,54 +223,36 @@ print('ontology printed')
 # def examp(sam):
 #     return True
 # [examp(i) for i in dev_df.values]
+number_of_sample=0
+mixed_files = 0
+
 for sample in dev_df.values:
+    mixed_flag = False
     fname = str(sample[0]) + '.wav'
     flabel = sample[1]
     fmids = sample[2].split(',')
     fsplit = sample[3]
     flabel = flabel.replace("_", " ")
     flabels = flabel.split(',')
-    if flabels[-1] in Desired_dic.keys():
-        print(flabels[-1])
-        if not Desired_dic[flabels[-1]] == {}:
-            print('hi')
-            if flabels[-2] in Desired_dic[flabels[-1]].keys():
-                print('hello level 2')
-                if Desired_dic[flabels[-1]][flabels[-2]].keys():
-                    print('hello level 3')
-                    if len(Desired_dic[flabels[-1]][flabels[-2]].keys()) > 1:
-                        print('Have to go one level further')
-                        if flabels[-3] in Desired_dic[flabels[-1]][flabels[-2]].keys():
-                            print('hello level 4')
-                            if len(Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]].keys()) > 1:
-                                print('Have to go one level further')
-                                if flabels[-4] in Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]].keys():
-                                    print('hello level 5')
-                                    if len(Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]][flabels[-4]].keys()) > 1:
-                                        print('Have to go one level further')
-                                        if flabels[-5] in Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]][
-                                            flabels[-4]].keys():
-                                            print('hello level 6')
-                                            if len(Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]][
-                                                       flabels[-4]][flabels[-5]].keys()) > 1:
-                                                print('Have to go one level further, but wont')
-                                            else:
-                                                level6_dir = os.path.join(out_dir, flabels[-5])
-                                                copy_file(level6_dir,
-                                                          source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
-                                                          destination=os.path.join(level6_dir, fname), filename=fname)
-                                    else:
-                                        level5_dir = os.path.join(out_dir, flabels[-4])
-                                        copy_file(level5_dir, source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
-                                                  destination=os.path.join(level5_dir, fname), filename=fname)
-                            else:
-                                level4_dir = os.path.join(out_dir, flabels[-3])
-                                copy_file(level4_dir, source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
-                                          destination=os.path.join(level4_dir, fname), filename=fname)
-                    else:
-                        level3_dir = os.path.join(out_dir, flabels[-2])
-                        copy_file(level3_dir, source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
-                                  destination=os.path.join(level3_dir, fname), filename=fname)
+    tempclass = None
+    for fmid in fmids:
+        for classes in Desired_dic.keys():
+            if fmid in Desired_dic[classes]:
+                if tempclass is None:
+                    tempclass=classes
+                else:
+                    if tempclass != classes:
+                        print('mixed file')
+                        mixed_flag = True
+    if tempclass != None:
+        if mixed_flag:
+            mixed_files += 1
+        else:
+            number_of_sample += 1
+
+
+
+
 
 dev_df.columns[1]
 dev_df.values[0]
@@ -385,3 +367,55 @@ dev_df.values[0]
 #                 elif inp == '2':
 #                     Desired_dic[P['name']][
 #                         P2['name']] = {'level': 'Finished level2_2'}
+
+
+
+
+# for sample in dev_df.values:
+#     fname = str(sample[0]) + '.wav'
+#     flabel = sample[1]
+#     fmids = sample[2].split(',')
+#     fsplit = sample[3]
+#     flabel = flabel.replace("_", " ")
+#     flabels = flabel.split(',')
+#     if flabels[-1] in Desired_dic.keys():
+#         print(flabels[-1])
+#         if not Desired_dic[flabels[-1]] == {}:
+#             print('hi')
+#             if flabels[-2] in Desired_dic[flabels[-1]].keys():
+#                 print('hello level 2')
+#                 if Desired_dic[flabels[-1]][flabels[-2]].keys():
+#                     print('hello level 3')
+#                     if len(Desired_dic[flabels[-1]][flabels[-2]].keys()) > 1:
+#                         print('Have to go one level further')
+#                         if flabels[-3] in Desired_dic[flabels[-1]][flabels[-2]].keys():
+#                             print('hello level 4')
+#                             if len(Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]].keys()) > 1:
+#                                 print('Have to go one level further')
+#                                 if flabels[-4] in Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]].keys():
+#                                     print('hello level 5')
+#                                     if len(Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]][flabels[-4]].keys()) > 1:
+#                                         print('Have to go one level further')
+#                                         if flabels[-5] in Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]][
+#                                             flabels[-4]].keys():
+#                                             print('hello level 6')
+#                                             if len(Desired_dic[flabels[-1]][flabels[-2]][flabels[-3]][
+#                                                        flabels[-4]][flabels[-5]].keys()) > 1:
+#                                                 print('Have to go one level further, but wont')
+#                                             else:
+#                                                 level6_dir = os.path.join(out_dir, flabels[-5])
+#                                                 copy_file(level6_dir,
+#                                                           source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
+#                                                           destination=os.path.join(level6_dir, fname), filename=fname)
+#                                     else:
+#                                         level5_dir = os.path.join(out_dir, flabels[-4])
+#                                         copy_file(level5_dir, source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
+#                                                   destination=os.path.join(level5_dir, fname), filename=fname)
+#                             else:
+#                                 level4_dir = os.path.join(out_dir, flabels[-3])
+#                                 copy_file(level4_dir, source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
+#                                           destination=os.path.join(level4_dir, fname), filename=fname)
+#                     else:
+#                         level3_dir = os.path.join(out_dir, flabels[-2])
+#                         copy_file(level3_dir, source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
+#                                   destination=os.path.join(level3_dir, fname), filename=fname)
