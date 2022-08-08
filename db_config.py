@@ -64,7 +64,7 @@ class DBConfig(object):
            
     
     def _load_rirdata(self):
-        matdata = scipy.io.loadmat(self._rirpath + '/rirdata.mat')
+        matdata = scipy.io.loadmat(os.path.join(self._rirpath, 'rirdata.mat'))
         rirdata = matdata['rirdata']['room'][0][0]
         return rirdata
     
@@ -83,7 +83,7 @@ class DBConfig(object):
                 for ns in range(nb_samples_per_class):
                     samplelist['class'] = np.append(samplelist['class'], ncl)
                     samplelist['audiofile'] = np.append(samplelist['audiofile'], folds[ncl][nfold][ns])
-                    audiopath = self._db_path + '/' + folds[ncl][nfold][ns]
+                    audiopath = os.path.join(self._db_path, folds[ncl][nfold][ns])
                     audio, sr = librosa.load(audiopath)
                     duration = len(audio)/float(sr)
                     samplelist['duration'] = np.append(samplelist['duration'], duration)
@@ -111,7 +111,7 @@ class DBConfig(object):
         
         for nfold in range(self._nb_folds):
             print('Preparing sample list for fold {}'.format(str(nfold+1)))
-            foldlist_file = self._db_path + '/NIGENS_8-foldSplit_fold' + str(nfold+1) + '_wo_timit.flist'
+            foldlist_file = os.path.join(self._db_path , 'NIGENS_8-foldSplit_fold' , str(nfold+1) , '_wo_timit.flist')
             filelist = []
             with open(foldlist_file, newline = '') as flist:
                 flist_reader = csv.reader(flist, delimiter='\t')
@@ -127,8 +127,8 @@ class DBConfig(object):
                 filename = clsfilename[1]
                 
                 samplelist['class'] = np.append(samplelist['class'], int(self._class_dict[clsname]))
-                samplelist['audiofile'] = np.append(samplelist['audiofile'], clsname + '/' + filename)
-                audiopath = self._db_path + '/' + clsname + '/' + filename
+                samplelist['audiofile'] = np.append(samplelist['audiofile'], os.path.join(clsname , filename))
+                audiopath = os.path.join(self._db_path , clsname , filename)
                 #print(audiopath)
                 #with contextlib.closing(wave.open(audiopath,'r')) as f:
                 audio, sr = librosa.load(audiopath)
@@ -139,7 +139,7 @@ class DBConfig(object):
                     onoffsets.append([0., samplelist['duration'][file]])
                     samplelist['onoffset'].append(np.array(onoffsets))
                 else:
-                    meta_file = self._db_path + '/' + clsname + '/' + filename + '.txt'
+                    meta_file = os.path.join(self._db_path , clsname , filename , '.txt')
                     onoffsets = []
                     with open(meta_file, newline = '') as meta:
                         meta_reader = csv.reader(meta, delimiter='\t')
@@ -169,19 +169,19 @@ class DBConfig(object):
         class_list = self._classes #list(self._classes.keys())
         
         for ntc in range(self._nb_classes):
-            classpath = self._db_path + '/' + class_list[ntc]
+            classpath = os.path.join(self._db_path , class_list[ntc])
             
             per_fold = []
             for nf in range(nb_folds):
-                foldpath = classpath + '/' + folds_names[nf]
+                foldpath = os.path.join(classpath, folds_names[nf])
                 foldcont = os.listdir(foldpath)
                 nb_subdirs = len(foldcont)
                 filelist = []
                 for ns in range(nb_subdirs):
-                    subfoldcont = os.listdir(foldpath + '/' + foldcont[ns])
+                    subfoldcont = os.listdir(os.path.join(foldpath , foldcont[ns]))
                     for nfl in range(len(subfoldcont)):
                         if subfoldcont[nfl][0] != '.' and subfoldcont[nfl].endswith('.wav'):
-                            filelist.append(class_list[ntc] + '/' + folds_names[nf] + '/' + foldcont[ns] + '/' + subfoldcont[nfl])
+                            filelist.append(os.path.join(class_list[ntc] , folds_names[nf] , foldcont[ns] , subfoldcont[nfl]))
                 per_fold.append(filelist)
             folds.append(per_fold)
         
