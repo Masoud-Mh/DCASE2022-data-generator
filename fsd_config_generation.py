@@ -47,6 +47,7 @@ ontology = json.load(f)
 
 Parent_list0 = ['Human sounds', 'Animal', 'Music', 'Sounds of things']
 Desired_dic = {}
+undesired_dic = {}
 
 sub_id_flag = False
 
@@ -88,24 +89,34 @@ for P1 in ontology:
                                                         if inp5 == '1':
                                                             Desired_dic[P5['name']] = sub_id(P5, ontology)
                                                             sub_id_flag = True
+                                                        else:
+                                                            undesired_dic[P5['name']] = sub_id(P5, ontology)
                                                 if not sub_id_flag:
                                                     Desired_dic[P4['name']] = P4['id']
                                                     sub_id_flag = True
                                             elif inp4 == '2':
                                                 Desired_dic[P4['name']] = sub_id(P4, ontology)
                                                 sub_id_flag = True
+                                            else:
+                                                undesired_dic[P4['name']] = sub_id(P4, ontology)
                                     if not sub_id_flag:
                                         Desired_dic[P3['name']] = [P3['id']]
                                         sub_id_flag = True
                                 elif inp3 == '2':
                                     Desired_dic[P3['name']] = sub_id(P3, ontology)
                                     sub_id_flag = True
+                                else:
+                                    undesired_dic[P3['name']] = sub_id(P3, ontology)
                         if not sub_id_flag:
                             Desired_dic[P2['name']] = [P2['id']]
                             sub_id_flag = True
                     elif inp2 == '2':
                         Desired_dic[P2['name']] = sub_id(P2, ontology)
                         sub_id_flag = True
+                    else:
+                        undesired_dic[P2['name']] = sub_id(P2, ontology)
+        else:
+            undesired_dic[P1['name']] = sub_id(P1, ontology)
 
 # for P in ontology:
 #     if P['name'] in Parent_list0:
@@ -225,7 +236,9 @@ print('ontology printed')
 # [examp(i) for i in dev_df.values]
 number_of_sample=0
 mixed_files = 0
-
+undesired_file_num = 0
+# undesired_mids = [i for i in [undesired_dic[y] for y in undesired_dic.keys()]]
+undesired_mids = [i for y in undesired_dic.keys() for i in undesired_dic[y]]
 for sample in dev_df.values:
     mixed_flag = False
     fname = str(sample[0]) + '.wav'
@@ -236,15 +249,26 @@ for sample in dev_df.values:
     flabels = flabel.split(',')
     tempclass = None
     for fmid in fmids:
-        for classes in Desired_dic.keys():
-            if fmid in Desired_dic[classes]:
-                if tempclass is None:
-                    tempclass=classes
-                else:
-                    if tempclass != classes:
-                        print('mixed file')
-                        mixed_flag = True
+        if fmid in undesired_mids:
+            undesired_file_num += 1
+            tempclass = None
+            break
+        else:
+            for classes in Desired_dic.keys():
+                if fmid in Desired_dic[classes]:
+                    if tempclass is None:
+                        tempclass=classes
+                    else:
+                        if tempclass != classes:
+                            print('mixed file')
+                            mixed_flag = True
+
+
     if tempclass != None:
+        foldname = os.path.join(out_dir, tempclass)
+        copy_file(foldname,
+                  source=os.path.join(db_dir, 'FSD50K.dev_audio', fname),
+                  destination=os.path.join(foldname, fname), filename=fname)
         if mixed_flag:
             mixed_files += 1
         else:
@@ -254,8 +278,10 @@ for sample in dev_df.values:
 
 
 
-dev_df.columns[1]
-dev_df.values[0]
+
+#
+# dev_df.columns[1]
+# dev_df.values[0]
 
 # Parent_list0 = ['Human sounds', 'Animal', 'Music', 'Sounds of things']
 # Desired_dic = {}
