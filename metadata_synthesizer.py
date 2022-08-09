@@ -213,9 +213,16 @@ class MetadataSynthesizer(object):
                         while np.sum(gaps) > self._total_silence_time_per_layer*10.:
                             silence_diff = np.sum(gaps) - self._total_silence_time_per_layer*10.
                             picked_gaps = np.argwhere(gaps > 2.*mult_min_gap_len)
-                            eq_subtract = silence_diff / len(picked_gaps)
-                            picked_gaps = np.argwhere((gaps - eq_subtract) > mult_min_gap_len)
-                            gaps[picked_gaps] -= eq_subtract
+                            if len(picked_gaps):
+                                eq_subtract = silence_diff / len(picked_gaps)
+                                picked_gaps = np.argwhere((gaps - eq_subtract) > mult_min_gap_len)
+                                if not len(picked_gaps):
+                                    gaps -= silence_diff / len(gaps)
+                                gaps[picked_gaps] -= eq_subtract
+                            else:
+                                eq_subtract = silence_diff / len(gaps)
+                                # picked_gaps = np.argwhere((gaps - eq_subtract) > mult_min_gap_len/4*3)
+                                gaps -= eq_subtract
                             
                         # distribute events in timeline
                         time_idx = 0
