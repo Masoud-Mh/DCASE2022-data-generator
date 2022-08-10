@@ -480,7 +480,7 @@ class MetadataSynthesizer(object):
                         # find the classes of the active events
                         active_classes = event_classes[active_events]
                         
-                        if not active_classes.ndim and active_classes.size:
+                        if not active_classes.ndim and active_classes.size: # todo: should add paranteses
                             # add to zero polyphony
                             stats['polyphony'][0] += 1
                         else:
@@ -511,7 +511,7 @@ class MetadataSynthesizer(object):
         # compute average polyphony
         weighted_polyphony_sum = 0
         for nn in range(self._mixture_setup['nOverlap']):
-            weighted_polyphony_sum += nn * stats['polyphony'][nn+1]
+            weighted_polyphony_sum += nn * stats['polyphony'][nn+1] # todo: should be fixed since it is not averaging
         
         stats['avg_polyphony'] = weighted_polyphony_sum / stats['event_presence']
         

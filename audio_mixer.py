@@ -50,7 +50,7 @@ class AudioMixer(object):
         # target signal-to-interference power ratio
         #  set at 3 now of all targets, so that the total interference power is 
         #approximately 0dB wrt. to a single layer of targets (for 3 target layers)
-        self._sir = 3.
+        self._sir = 3.  # todo: maybe need to change this
         self._nb_folds = mixture_setup['nb_folds']
         self._rnd_generator = np.random.default_rng(2024)
 

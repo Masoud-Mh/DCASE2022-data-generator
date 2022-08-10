@@ -25,7 +25,7 @@ params['nb_mixtures_per_fold'] = [9, 3]   # todo
 db_handler = open('db_config_fsd_custom.obj', 'rb')
 db_config = pickle.load(db_handler)
 db_handler.close()
-
+# todo: if mixtures are less than the number of samples, to use all samples, it is better to find the start randomly
 # create mixture synthesizer class
 noiselessSynth = MetadataSynthesizer(db_config, params, 'target_noiseless')
 
@@ -34,7 +34,7 @@ mixtures_target, mixture_setup_target, foldlist_target = noiselessSynth.create_m
 
 # calculate statistics and create metadata structure
 metadata, stats = noiselessSynth.prepare_metadata_and_stats()
-
+# todo: should save metadata or class instance for later in case something goes wrong
 # write metadata to text files
 noiselessSynth.write_metadata()
 

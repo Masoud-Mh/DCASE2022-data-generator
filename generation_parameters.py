@@ -51,11 +51,12 @@ def get_params(argv='1'):
         params[
             "db_path"] = 'E:\SELD_2022\classified_FSD50K'  # path containing audio events to be utilized during data generation
         params['max_polyphony'] = 2  # maximum number of overlapping sound events
-        params['active_classes'] = [0, 1]#, 2, 3, 5, 6, 8, 9, 10, 11, 12, 13]  # todo
+        params['active_classes'] = [0, 1]  # , 2, 3, 5, 6, 8, 9, 10, 11, 12, 13]  # todo
         params['nb_mixtures_per_fold'] = [900, 300]  # if scalar, same number of mixtures for each fold
         params['mixture_duration'] = 60.  # in seconds
         params['event_time_per_layer'] = 40.  # in seconds (should be less than mixture_duration)
-        params['audio_format'] = 'both'  # 'foa' (First Order Ambisonics) or 'mic' (four microphones) or 'both'
+        params['audio_format'] = 'foa'  # 'both'  # 'foa' (First Order Ambisonics) or 'mic' (four microphones) or
+        # 'both'
 
     else:
         print('ERROR: unknown argument {}'.format(argv))
