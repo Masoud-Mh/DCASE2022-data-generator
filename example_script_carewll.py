@@ -17,12 +17,12 @@ from generation_parameters import get_params
 task_id = '4'
 
 params = get_params(task_id)
-params['nb_mixtures_per_fold'] = [9, 3]   # todo
+params['nb_mixtures_per_fold'] = [6, 3]   # todo
 ### Create database config based on params (e.g. filelist name etc.)
 # db_config = DBConfig(params)
 
 # LOAD DB-config which is already done
-db_handler = open('db_config_fsd_custom.obj', 'rb')
+db_handler = open('db_config_fsd_custom_carewell.obj', 'rb')
 db_config = pickle.load(db_handler)
 db_handler.close()
 # todo: if mixtures are less than the number of samples, to use all samples, it is better to find the start randomly

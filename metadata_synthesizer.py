@@ -122,7 +122,8 @@ class MetadataSynthesizer(object):
                     traj_doas.append(all_doas)
             
                 # start layering the mixtures for the specific room
-                sample_counter = 0
+                # sample_counter = 0
+                sample_counter = np.random.randint(0, nb_samples_nf)
                 if np.isscalar(self._nb_mixtures_per_fold):
                     nb_mixtures_per_fold_per_room = int(np.round(self._nb_mixtures_per_fold / float(nb_rooms_nf)))
                 else:
