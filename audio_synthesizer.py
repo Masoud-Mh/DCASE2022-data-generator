@@ -115,8 +115,14 @@ class AudioSynthesizer(object):
                             ntraj = int(mixture_nm['trajectory'])
 
                         # load event audio and resample to match RIR sampling
-                        eventsig, fs_db = soundfile.read(
-                            os.path.join(self._db_path, self._classnames[classidx], folds_names[nfold], filename))
+                        try:
+                            eventsig, fs_db = soundfile.read(
+                                os.path.join(self._db_path, filename))
+                        except:
+                            eventsig, fs_db = soundfile.read(
+                                os.path.join(self._db_path, filename[0]))
+                        # eventsig, fs_db = soundfile.read(
+                        #     os.path.join(self._db_path, self._classnames[classidx], folds_names[nfold], filename))
                         # eventsig, fs_db = soundfile.read(os.path.join(self._db_path, folds_names[nfold], filename))
                         if len(np.shape(eventsig)) > 1:
                             eventsig = eventsig[:, 0]

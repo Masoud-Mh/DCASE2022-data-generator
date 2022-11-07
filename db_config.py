@@ -111,12 +111,16 @@ class DBConfig(object):
         
         for nfold in range(self._nb_folds):
             print('Preparing sample list for fold {}'.format(str(nfold+1)))
-            foldlist_file = os.path.join(self._db_path , 'NIGENS_8-foldSplit_fold' , str(nfold+1) , '_wo_timit.flist')
+            foldlist_file = os.path.join(self._db_path , 'NIGENS_8-foldSplit_fold' + str(nfold+1) + '_wo_timit.flist')
             filelist = []
-            with open(foldlist_file, newline = '') as flist:
-                flist_reader = csv.reader(flist, delimiter='\t')
-                for fline in flist_reader:
-                    filelist.append(fline)
+            flist = open(foldlist_file, newline = '')
+            flist_reader = csv.reader(flist, delimiter='\t')
+            for fline in flist_reader:
+                filelist.append(fline)
+            # with open(foldlist_file, newline = '') as flist:
+            #     flist_reader = csv.reader(flist, delimiter='\t')
+            #     for fline in flist_reader:
+            #         filelist.append(fline)
             flist_len = len(filelist)
             
             samplelist = {'class': np.array([]), 'audiofile': np.array([]), 'duration': np.array([]), 'onoffset': [], 'nSamples': flist_len,
@@ -139,12 +143,18 @@ class DBConfig(object):
                     onoffsets.append([0., samplelist['duration'][file]])
                     samplelist['onoffset'].append(np.array(onoffsets))
                 else:
-                    meta_file = os.path.join(self._db_path , clsname , filename , '.txt')
+                    meta_file = os.path.join(self._db_path , clsname , filename + '.txt')
                     onoffsets = []
-                    with open(meta_file, newline = '') as meta:
-                        meta_reader = csv.reader(meta, delimiter='\t')
-                        for onoff in meta_reader:
-                            onoffsets.append([float(onoff[0]), float(onoff[1])])
+                    meta = open(meta_file, newline = '')
+                    meta_reader = csv.reader(meta, delimiter='\t')
+                    print(clsname)
+                    print(filename)
+                    for onoff in meta_reader:
+                        onoffsets.append([float(onoff[0]), float(onoff[1])])
+                    # with open(meta_file, newline = '') as meta:
+                    #     meta_reader = csv.reader(meta, delimiter='\t')
+                    #     for onoff in meta_reader:
+                    #         onoffsets.append([float(onoff[0]), float(onoff[1])])
                             
                     samplelist['onoffset'].append(np.array(onoffsets))
             samplelist['onoffset'] = np.squeeze(np.array(samplelist['onoffset'],dtype=object))
