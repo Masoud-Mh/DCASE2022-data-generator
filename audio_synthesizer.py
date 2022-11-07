@@ -37,7 +37,7 @@ class AudioSynthesizer(object):
         # create path if doesn't exist
         if not os.path.isdir(self._outpath):
             os.makedirs(self._outpath)
-        folds_names = ['train', 'test']  # TODO: make it more generic
+
         for nfold in range(self._nb_folds):
             print('Generating scene audio for fold {}'.format(nfold + 1))
 
@@ -99,9 +99,18 @@ class AudioSynthesizer(object):
                         nb_events = len(mixture_nm['class'])
                     except TypeError:
                         nb_events = 1
+                        print('*************************Be CAreful *******************************')
+                        print('*************************Be CAreful *******************************')
+                        print('*************************Be CAreful *******************************')
+                        print('*************************Be CAreful *******************************')
+                        print('*************************Be CAreful *******************************')
 
                     mixsig = np.zeros((self._l_mix, 4))
                     for nev in range(nb_events):
+                        # classidx = int(mixture_nm['class'][nev])
+                        # onoffset = mixture_nm['event_onoffsets'][nev, :]
+                        # filename = mixture_nm['files'][nev]
+                        # ntraj = int(mixture_nm['trajectory'][nev])
                         if not nb_events == 1:
                             classidx = int(mixture_nm['class'][nev])
                             onoffset = mixture_nm['event_onoffsets'][nev, :]
@@ -110,20 +119,12 @@ class AudioSynthesizer(object):
 
                         else:
                             classidx = int(mixture_nm['class'])
-                            onoffset = mixture_nm['event_onoffsets']
-                            filename = mixture_nm['files']
+                            onoffset = mixture_nm['event_onoffsets'][nev, :]
+                            filename = mixture_nm['files'][nev]
                             ntraj = int(mixture_nm['trajectory'])
 
                         # load event audio and resample to match RIR sampling
-                        try:
-                            eventsig, fs_db = soundfile.read(
-                                os.path.join(self._db_path, filename))
-                        except:
-                            eventsig, fs_db = soundfile.read(
-                                os.path.join(self._db_path, filename[0]))
-                        # eventsig, fs_db = soundfile.read(
-                        #     os.path.join(self._db_path, self._classnames[classidx], folds_names[nfold], filename))
-                        # eventsig, fs_db = soundfile.read(os.path.join(self._db_path, folds_names[nfold], filename))
+                        eventsig, fs_db = soundfile.read(self._db_path + '/' + filename)
                         if len(np.shape(eventsig)) > 1:
                             eventsig = eventsig[:, 0]
                         eventsig = signal.resample_poly(eventsig, self._fs_mix, fs_db)
@@ -132,10 +133,17 @@ class AudioSynthesizer(object):
                         riridx = mixture_nm['rirs'][nev] if nb_events > 1 else mixture_nm['rirs']
 
                         moving_condition = mixture_nm['isMoving'][nev] if nb_events > 1 else mixture_nm['isMoving']
-                        if nb_events > 1 and not moving_condition:
+                        if not moving_condition:
                             riridx = int(riridx[0]) if len(riridx) == 1 else riridx.astype('int')
+                        # if nb_events > 1 and not moving_condition:
+                        #     riridx = int(riridx[0]) if len(riridx)==1 else riridx.astype('int')
 
                         if moving_condition:
+                            if len(riridx.shape) == 2:
+                                riridx = riridx.flatten()
+                                riridx = riridx.astype('int')
+                            else:
+                                print('testing')
                             nRirs_moving = len(riridx) if np.shape(riridx) else 1
                             ir_times = self._time_idx100[np.arange(0, nRirs_moving)]
                             mixeventsig = 481.6989 * utils.ctf_ltv_direct(eventsig, channel_rirs[:, :, riridx, ntraj],
@@ -193,3 +201,10 @@ class AudioSynthesizer(object):
                     mixsig = gnorm * mixsig
                     mixture_filename = 'fold{}_room{}_mix{:03}.wav'.format(nfold + 1, nr + 1, nmix + 1)
                     soundfile.write(self._outpath + '/' + mixture_filename, mixsig, self._fs_mix)
+
+
+
+
+
+
+
