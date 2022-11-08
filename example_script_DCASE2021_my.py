@@ -19,11 +19,11 @@ task_id = '1'  ### '1' - NIGENS, '2' - FSD50k
 params = get_params(task_id)
 
 ### Create database config based on params (e.g. filelist name etc.)
-db_config = DBConfig(params)
-
-db_handler = open('db_config_my_singles.obj', 'wb')
-pickle.dump(db_config, db_handler)
-db_handler.close()
+# db_config = DBConfig(params)
+#
+# db_handler = open('db_config_my_singles.obj', 'wb')
+# pickle.dump(db_config, db_handler)
+# db_handler.close()
 
 # LOAD DB-config which is already done
 db_handler = open('db_config_my_singles.obj', 'rb')
