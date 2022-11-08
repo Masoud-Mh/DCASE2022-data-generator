@@ -21,12 +21,12 @@ params = get_params(task_id)
 ### Create database config based on params (e.g. filelist name etc.)
 db_config = DBConfig(params)
 
-db_handler = open('db_config_nigens_my.obj', 'wb')
+db_handler = open('db_config_my_singles.obj', 'wb')
 pickle.dump(db_config, db_handler)
 db_handler.close()
 
 # LOAD DB-config which is already done
-db_handler = open('db_config_nigens_my.obj', 'rb')
+db_handler = open('db_config_my_singles.obj', 'rb')
 db_config = pickle.load(db_handler)
 db_handler.close()
 
@@ -43,10 +43,10 @@ metadata, stats = noiselessSynth.prepare_metadata_and_stats()
 noiselessSynth.write_metadata()
 
 # create directional interference mixtures
-task_id_int = '3'
-params_interference = get_params(task_id_int)
-noiselessSynth_interference = MetadataSynthesizer(db_config, params_interference, 'target_interf')
-interference_target, interference_setup_target, foldlist_target_int = noiselessSynth_interference.create_mixtures()
+# task_id_int = '3'
+# params_interference = get_params(task_id_int)
+# noiselessSynth_interference = MetadataSynthesizer(db_config, params_interference, 'target_interf')
+# interference_target, interference_setup_target, foldlist_target_int = noiselessSynth_interference.create_mixtures()
 
 if not params['audio_format'] == 'both':  # create a dataset of only one data format (FOA or MIC)
     # create audio synthesis class and synthesize audio files for given mixtures
@@ -55,13 +55,15 @@ if not params['audio_format'] == 'both':  # create a dataset of only one data fo
     noiselessAudioSynth.synthesize_mixtures()
 
     # synthesize audio containing interference mixtures
-    noiselessAudioSynth_interference = AudioSynthesizer(params_interference, interference_target,
-                                                        interference_setup_target, db_config, params['audio_format'])
-    noiselessAudioSynth_interference.synthesize_mixtures()
+    # noiselessAudioSynth_interference = AudioSynthesizer(params_interference, interference_target,
+    #                                                     interference_setup_target, db_config, params['audio_format'])
+    # noiselessAudioSynth_interference.synthesize_mixtures()
 
     # mix the created audio mixtures with background noise and interference mixtures
+    # audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, params['audio_format'],
+    #                         'target_interf_noisy')
     audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, params['audio_format'],
-                            'target_interf_noisy')
+                            'target_noisy')
     audioMixer.mix_audio()
 else:
     # create audio synthesis class and synthesize audio files for given mixtures
@@ -71,12 +73,12 @@ else:
     noiselessAudioSynth2.synthesize_mixtures()
 
     # synthesize audio containing interference mixtures
-    noiselessAudioSynth_interference = AudioSynthesizer(params_interference, interference_target,
-                                                        interference_setup_target, db_config, 'foa')
-    noiselessAudioSynth_interference.synthesize_mixtures()
-    noiselessAudioSynth_interference2 = AudioSynthesizer(params_interference, interference_target,
-                                                         interference_setup_target, db_config, 'mic')
-    noiselessAudioSynth_interference2.synthesize_mixtures()
+    # noiselessAudioSynth_interference = AudioSynthesizer(params_interference, interference_target,
+    #                                                     interference_setup_target, db_config, 'foa')
+    # noiselessAudioSynth_interference.synthesize_mixtures()
+    # noiselessAudioSynth_interference2 = AudioSynthesizer(params_interference, interference_target,
+    #                                                      interference_setup_target, db_config, 'mic')
+    # noiselessAudioSynth_interference2.synthesize_mixtures()
 
     # mix the created audio mixtures with background noise and interference mixtures
     audioMixer = AudioMixer(params, db_config, mixtures_target, mixture_setup_target, 'foa', 'target_interf_noisy')

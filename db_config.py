@@ -121,8 +121,8 @@ class DBConfig(object):
             #     flist_reader = csv.reader(flist, delimiter='\t')
             #     for fline in flist_reader:
             #         filelist.append(fline)
+            flist.close()
             flist_len = len(filelist)
-            
             samplelist = {'class': np.array([]), 'audiofile': np.array([]), 'duration': np.array([]), 'onoffset': [], 'nSamples': flist_len,
                           'nSamplesPerClass': np.array([]), 'meanStdDurationPerClass': np.array([]), 'minMaxDurationPerClass': np.array([])}
             for file in range(flist_len):
@@ -151,6 +151,7 @@ class DBConfig(object):
                     print(filename)
                     for onoff in meta_reader:
                         onoffsets.append([float(onoff[0]), float(onoff[1])])
+                    meta.close()
                     # with open(meta_file, newline = '') as meta:
                     #     meta_reader = csv.reader(meta, delimiter='\t')
                     #     for onoff in meta_reader:

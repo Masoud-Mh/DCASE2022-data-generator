@@ -199,7 +199,8 @@ class AudioSynthesizer(object):
                     gnorm = 0.5 / np.max(np.max(np.abs(mixsig)))
 
                     mixsig = gnorm * mixsig
-                    mixture_filename = 'fold{}_room{}_mix{:03}.wav'.format(nfold + 1, nr + 1, nmix + 1)
+                    mixture_filename = 'fold{}_room{}_mix{:03}.wav'.format(nfold + 11, nr + 1, nmix + 1)
+                    # mixture_filename = 'fold{}_room{}_mix{:03}.wav'.format(nfold + 1, nr + 1, nmix + 1)
                     soundfile.write(self._outpath + '/' + mixture_filename, mixsig, self._fs_mix)
 
 

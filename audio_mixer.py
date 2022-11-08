@@ -84,7 +84,8 @@ class AudioMixer(object):
                 nb_mixtures = len(self._mixtures[nfold][nr]['mixture'])
                 for nmix in range(nb_mixtures):
                     print('Loading target mixture {}/{} \n'.format(nmix + 1, nb_mixtures))
-                    mixture_filename = 'fold{}_room{}_mix{:03}.wav'.format(nfold + 1, nr + 1, nmix + 1)
+                    mixture_filename = 'fold{}_room{}_mix{:03}.wav'.format(nfold + 11, nr + 1, nmix + 1)
+                    # mixture_filename = 'fold{}_room{}_mix{:03}.wav'.format(nfold + 1, nr + 1, nmix + 1)
                     snr = self._mixtures[nfold][nr]['mixture'][nmix]['snr']
 
                     target_sig, _ = soundfile.read(self._targetpath + '/' + self._audio_format + '/' + mixture_filename)

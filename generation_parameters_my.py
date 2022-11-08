@@ -12,20 +12,19 @@ def get_params(argv='1'):
         # output path for the generated dataset
         noisepath='D:/Masoud/TAU-SNoise_DB',
         # path containing background noise recordings
-        nb_folds=8,  # number of folds (default 2 - training and testing)
-        rooms2fold=[[10, 6, 1, 4, 3, 8],
-                    [10, 6, 1, 4, 3, 8],
-                    [10, 6, 1, 4, 3, 8],
-                    [10, 6, 1, 4, 3, 8],
-                    [10, 6, 1, 4, 3, 8],
-                    [10, 6, 1, 4, 3, 8],
-                    [9, 5, 2, 0, 0, 0],  # FOLD 1, rooms assigned to each fold (0's are ignored)
-                    [9, 5, 2, 0, 0, 0]],  # FOLD 2
+        nb_folds=6,  # number of folds (default 2 - training and testing)
+        rooms2fold=[[10, 6, 1, 4, 3, 8, 9, 5, 2],
+                    [10, 6, 1, 4, 3, 8, 9, 5, 2],
+                    [10, 6, 1, 4, 3, 8, 9, 5, 2],
+                    [10, 6, 1, 4, 3, 8, 9, 5, 2],
+                    [10, 6, 1, 4, 3, 8, 9, 5, 2],
+                    [10, 6, 1, 4, 3, 8, 9, 5, 2],
+                    ],  # FOLD 2
         db_path='D:/Masoud/NIGENS',
         # path containing audio events to be utilized during data generation
         max_polyphony=1,  # maximum number of overlapping sound events
         active_classes=[0, 1, 2, 3, 5, 6, 8, 9, 10, 11, 12, 13],  # list of sound classes to be used for data generation
-        nb_mixtures_per_fold=20,  # if scalar, same number of mixtures for each fold
+        nb_mixtures_per_fold=100,  # if scalar, same number of mixtures for each fold
         mixture_duration=60.,  # in seconds
         event_time_per_layer=40.,  # in seconds (should be less than mixture_duration)
         audio_format='foa',  # 'foa' (First Order Ambisonics) or 'mic' (four microphones) or 'both'

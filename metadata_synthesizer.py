@@ -37,7 +37,8 @@ class MetadataSynthesizer(object):
             self._nb_mixtures_per_fold) else np.sum(self._nb_mixtures_per_fold)
         self._mixture_setup['total_duration'] = self._nb_mixtures * self._mixture_setup['mixture_duration']
         self._mixture_setup['speed_set'] = [10., 20., 40.]
-        self._mixture_setup['snr_set'] = np.arange(6., 31.)
+        self._mixture_setup['snr_set'] = [9]
+        # self._mixture_setup['snr_set'] = np.arange(6., 31.)
         self._mixture_setup['time_idx_100ms'] = np.arange(0., self._mixture_setup['mixture_duration'], 0.1)
         self._mixture_setup['nOverlap'] = params['max_polyphony']
         self._nb_frames = len(self._mixture_setup['time_idx_100ms'])
@@ -570,7 +571,8 @@ class MetadataSynthesizer(object):
                     metadata_nm = self._metadata[nfold][nr][nmix]
 
                     # write to filename, omitting non-active frames
-                    mixture_filename = 'fold{}_room{}_mix{:03}.csv'.format(nfold + 1, nr + 1, nmix + 1)
+                    mixture_filename = 'fold{}_room{}_mix{:03}.csv'.format(nfold + 11, nr + 1, nmix + 1)
+                    # mixture_filename = 'fold{}_room{}_mix{:03}.csv'.format(nfold + 1, nr + 1, nmix + 1)
                     file_id = open(self._metadata_path + '/' + mixture_filename, 'w', newline="")
                     metadata_writer = csv.writer(file_id, delimiter=',', quoting=csv.QUOTE_NONE)
                     for nf in range(self._nb_frames):
